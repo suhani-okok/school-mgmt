@@ -14,6 +14,8 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 // Test connection on startup
 (async () => {
   try {
