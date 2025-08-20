@@ -1,0 +1,19 @@
+{
+  "name": "school_mgmt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mariadb": "file:mariadb-connector-nodejs-3.4.5.tar.gz",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.14.3"
+  }
+}
