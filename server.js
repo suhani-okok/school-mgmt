@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2/promise'); // mysql2 with promises
+const mysql = require('mysql2/promise'); // use mysql2 with promises
 require('dotenv').config();
 
 const app = express();
@@ -7,14 +7,12 @@ app.use(express.json()); // parse JSON request body
 
 // MySQL connection pool using Railway DATABASE_URL
 const pool = mysql.createPool({
-  uri: process.env.DATABASE_URL,  // Railway injects full MySQL URL here
-  ssl: { rejectUnauthorized: false }, // required for Railway
+  uri: process.env.DATABASE_URL,  // Railway injects the full MySQL URL
+  ssl: { rejectUnauthorized: false }, // required for Railway MySQL
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
-
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 // Test connection on startup
 (async () => {
