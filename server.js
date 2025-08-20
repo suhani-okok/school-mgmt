@@ -5,6 +5,9 @@ require('dotenv').config();
 const app = express();
 app.use(express.json()); // to parse JSON request body
 
+
+
+
 // MySQL connection pool
 const pool = mysql.createPool({
   host: process.env.MYSQLHOST,
@@ -88,6 +91,18 @@ app.post('/listSchools', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+app.get('/test-db', (req, res) => {
+  connection.query('SELECT 1 + 1 AS result', (err, results) => {
+    if (err) {
+      console.error('DB connection error:', err);
+      return res.status(500).send('Database not connected');
+    }
+    res.send('Database connected! Result: ' + results[0].result);
+  });
+});
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
