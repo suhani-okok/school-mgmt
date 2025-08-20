@@ -94,6 +94,13 @@ app.get('/test-db', async (req, res) => {
   }
 });
 
+
+app.all('*', (req, res) => {
+  console.log(`Incoming ${req.method} request to ${req.path}`);
+  res.status(404).send('Route not found');
+});
+
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
