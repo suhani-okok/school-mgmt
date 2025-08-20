@@ -1,29 +1,20 @@
 const express = require('express');
-const mysql = require('mysql2/promise');  // use mysql2 with promises
+const mysql = require('mysql2/promise'); // mysql2 with promises
 require('dotenv').config();
 
 const app = express();
-app.use(express.json()); // to parse JSON request body
+app.use(express.json()); // parse JSON request body
 
-
-
-
-// MySQL connection pool
+// MySQL connection pool using Railway DATABASE_URL
 const pool = mysql.createPool({
-  host: process.env.MYSQLHOST,
-  port: process.env.MYSQLPORT,
-  user: process.env.MYSQLUSER,
-  password: process.env.MYSQLPASSWORD,
-  database: process.env.MYSQLDATABASE,
-  ssl: {
-    rejectUnauthorized: true
-  },
+  uri: process.env.DATABASE_URL,  // Railway injects full MySQL URL here
+  ssl: { rejectUnauthorized: false }, // required for Railway
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
 });
 
-// Test connection
+// Test connection on startup
 (async () => {
   try {
     const conn = await pool.getConnection();
@@ -92,18 +83,18 @@ app.post('/listSchools', async (req, res) => {
   }
 });
 
-app.get('/test-db', (req, res) => {
-  connection.query('SELECT 1 + 1 AS result', (err, results) => {
-    if (err) {
-      console.error('DB connection error:', err);
-      return res.status(500).send('Database not connected');
-    }
+// Test DB route
+app.get('/test-db', async (req, res) => {
+  try {
+    const [results] = await pool.query('SELECT 1 + 1 AS result');
     res.send('Database connected! Result: ' + results[0].result);
-  });
+  } catch (err) {
+    console.error('DB connection error:', err);
+    res.status(500).send('Database not connected');
+  }
 });
 
-
-
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
